@@ -6,35 +6,56 @@
 /*   By: emtemir <emtemir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 14:02:28 by emtemir           #+#    #+#             */
-/*   Updated: 2023/09/02 14:23:51 by emtemir          ###   ########.fr       */
+/*   Updated: 2023/09/02 19:14:04 by emtemir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <unistd.h>
-#include <string.h>
+#include "minitalk.h"
 
-void send_signal(pid_t server_pid, const char *message) {
-    if (strlen(message) <= 100) {
-        kill(server_pid, SIGUSR1);
-    } else {
-        kill(server_pid, SIGUSR2);
-    }
+void	message_recieved(int a)
+{
+	(void)a;
+	ft_putstr("***********************************************\n");
+	ft_putstr("* 👨‍💻*--------👾 Message Recevied 👾--------*👨‍💻 *\n");
+	ft_putstr("* 👨‍💻*--------👾        💪🏻        👾--------*👨‍💻 *\n");
+	ft_putstr("* 👨‍💻*--------👾 Message Recevied 👾--------*👨‍💻 *\n");
+	ft_putstr("***********************************************\n");
 }
 
-int main(int argc, char *argv[]) {
-    if (argc != 3) {
-        printf("Usage: %s <Server PID> <Message>\n", argv[0]);
-        return 1;
-    }
+static void	send_byte_to_server(char byte, int pid)
+{
+	int	i;
 
-    pid_t server_pid = atoi(argv[1]);
-    const char *message = argv[2];
+	i = 7;
+	while (i >= 0)
+	{
+		if (byte >> i & 1)
+			kill(pid, SIGUSR2);
+		else
+			kill(pid, SIGUSR1);
+		usleep(400); // for avoiding the lag i use usleep with 400 micro second
+		i--;
+	}
+}
 
-    send_signal(server_pid, message);
-    printf("Sent message to Server: '%s'\n", message);
+int	main(int ac, char *av[])
+{
+	char	*str;
+	pid_t	pid;
 
-    return 0;
+	signal(SIGUSR1, message_recieved); // to detect if the message has been sent. if yes message_recieved get print on client screen
+	if (ac != 3)
+	{
+		ft_putstr("Client iki argüman alır :\n◦ PID.\n◦ Gönderilecek Mesaj.");
+		exit(1);
+	}
+	pid = ft_atoi(av[1]);
+	str = av[2];
+	while (*str)
+	{
+		send_byte_to_server(*str, pid);
+		str++;
+	}
+	send_byte_to_server(0, pid);
+	return (0);
 }
