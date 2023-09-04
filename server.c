@@ -6,7 +6,7 @@
 /*   By: emtemir <emtemir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 14:02:30 by emtemir           #+#    #+#             */
-/*   Updated: 2023/09/02 19:48:57 by emtemir          ###   ########.fr       */
+/*   Updated: 2023/09/04 21:04:28 by emtemir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static void	my_handler(int mysig, siginfo_t *info, void *context)
         i = 0;
         pid = 0;
     }   
-
     // Alınan sinyali SIGUSR1'den çıkarır. Eğer mysig SIGUSR1 ile aynıysa sonuç 0 olur,
     // aksi takdirde sonuç 1 olur.
     mysig -= SIGUSR1;
@@ -86,7 +85,7 @@ int main()
     signal_return = sigaction(SIGUSR2, &signal, NULL);
     if (signal_return == -1)
         exit(1);
-
+    
     // Sunucu PID'sini ekrana yazdırır
     ft_putstr("SERVER ID-> ");
     ft_putnbr(getpid());

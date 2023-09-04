@@ -6,7 +6,7 @@
 /*   By: emtemir <emtemir@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 14:02:28 by emtemir           #+#    #+#             */
-/*   Updated: 2023/09/02 19:44:46 by emtemir          ###   ########.fr       */
+/*   Updated: 2023/09/04 18:41:38 by emtemir          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	send_byte_to_server(char byte, int pid)
 			kill(pid, SIGUSR2);
 		else
 			kill(pid, SIGUSR1);
-		usleep(400); // for avoiding the lag i use usleep with 400 micro second
+		usleep(300);
 		i--;
 	}
 }
@@ -42,6 +42,7 @@ int	main(int ac, char *av[])
 	pid_t	pid;
 
 	signal(SIGUSR1, message_recieved); // to detect if the message has been sent. if yes message_recieved get print on client screen
+	
 	if (ac != 3)
 	{
 		ft_putstr("Client iki argüman alır:   \n -PID(serverdan gelecek).\n -Gönderilecek Mesaj. \n");
